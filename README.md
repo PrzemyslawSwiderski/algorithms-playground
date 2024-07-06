@@ -1,0 +1,1 @@
+# Project with sample algorithmic problems solutions
