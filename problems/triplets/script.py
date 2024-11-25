@@ -18,13 +18,14 @@ def compare_triplets(a, b):
 
     i = 0
     while i < len(a):
-        if a[i]>b[i]:
-            alice_score+=1
-        if a[i]<b[i]:
-            bob_score+=1
-        i+=1
+        if a[i] > b[i]:
+            alice_score += 1
+        if a[i] < b[i]:
+            bob_score += 1
+        i += 1
 
     return [alice_score, bob_score]
+
 
 if __name__ == '__main__':
     fptr = open(os.environ['OUTPUT_PATH'], 'w')
