@@ -1,6 +1,7 @@
 #!/bin/python3
 
 import os
+from itertools import product, combinations
 
 
 #
@@ -10,60 +11,40 @@ import os
 # The function accepts STRING_ARRAY grid as parameter.
 #
 
-def valid_plus(max_len, grid, x, y):
-    margin = max_len // 2
-    i = margin
-
-    while i < x - margin:
-        j = margin
-        while j < y - margin:
-            k = 0
-            good = True
-            while k <= margin:
-                if grid[i + k][j] != 'G':
-                    good = False
-                if grid[i][j + k] != 'G':
-                    good = False
-                if grid[i - k][j] != 'G':
-                    good = False
-                if grid[i][j - k] != 'G':
-                    good = False
-                k += 1
-            if good:
-                k = 0
-                while k <= margin:
-                    grid[i + k][j] = 'B'
-                    grid[i][j + k] = 'B'
-                    grid[i - k][j] = 'B'
-                    grid[i][j - k] = 'B'
-                    k += 1
-                return True
-            j += 1
-        i += 1
-
-    return False
+def find_max_product(all_pluses):
+    max_prod = 0
+    for i in combinations(all_pluses, 2):
+        plus_1 = i[0]
+        plus_2 = i[1]
+        # check if the pluses are not overlapping each other
+        if not plus_1.intersection(plus_2):
+            prod = len(plus_1) * len(plus_2)
+            max_prod = max(max_prod, prod)
+    return max_prod
 
 
 def two_pluses(grid):
-    # Write your code here
-    plus_prod = 1
-    x = len(grid)
-    y = len(grid[0])
-    max_len = min(x, y)
-    if max_len % 2 == 0:
-        max_len -= 1
+    all_pluses = []
+    # iterate through the grid
+    for i, j in product(range(len(grid)), range(len(grid[0]))):
+        if grid[i][j] == 'G':
+            temp_pluses = set()
+            plus_max_length = len(grid) // 2
+            for k in range(0, plus_max_length + 1):
+                # check if plus is within the grid
+                if j - k < 0 or j + k > len(grid[0]) - 1 or i - k < 0 or i + k > len(grid) - 1:
+                    break
+                # check if plus expanding is doable in all directions
+                if grid[i][j - k] == grid[i][j + k] == grid[i - k][j] == grid[i + k][j] == 'G':
+                    # update set with the union
+                    temp_pluses.update(((i, j - k), (i, j + k,), (i - k, j), (i + k, j)))
+                    all_pluses.append(temp_pluses.copy())
+                else:
+                    break
 
-    counter = 2
+    max_prod = find_max_product(all_pluses)
 
-    while max_len >= 1 and counter>0:
-        res = valid_plus(max_len, grid, x, y)
-        if res:
-            counter-=1
-            plus_prod*=(2*max_len - 1)
-        else:
-            max_len-=2
-
-    return plus_prod
+    return max_prod
 
 
 if __name__ == '__main__':
@@ -79,7 +60,7 @@ if __name__ == '__main__':
 
     for _ in range(n):
         grid_item = input()
-        grid.append(list(grid_item))
+        grid.append(grid_item)
 
     result = two_pluses(grid)
 
