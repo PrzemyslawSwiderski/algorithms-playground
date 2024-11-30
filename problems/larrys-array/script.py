@@ -1,6 +1,7 @@
 #!/bin/python3
 
 import os
+from itertools import count
 
 
 #
@@ -11,16 +12,17 @@ import os
 # The function accepts INTEGER_ARRAY A as parameter.
 #
 def larrys_array(A):
-    # Write your code here
 
-    sorted_A = sorted(A)
+    # Checking if the inversions count is even.
+    # Similar to 15 Puzzle Problem -> https://www.geeksforgeeks.org/check-instance-15-puzzle-solvable/.
+    # An inversion occurs when a given value in an array precedes another value in the array.
+    # For instance, in an array of: 3 1 4 5 6 2
+    # 1 is preceded by higher value 3, so that's 1 inversion. 3, 4, 5, and 6 each precede the lower value 2, so that's 1 inversion each.
+    # For this problem, the array can be solved with the given formula if the total number of inversions is even/divisible by 2.
 
-    result = can_be_sorted(sorted_A, A, 0, 3)
+    count = len([i for i in range(len(A)) for j in range(i + 1, len(A)) if A[i] > A[j]])
 
-    if result:
-        return "YES"
-    else:
-        return "NO"
+    return 'YES' if count % 2 == 0 else 'NO'
 
 
 def rotate(A, i):
