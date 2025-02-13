@@ -28,14 +28,13 @@ def get_ways(n, c):
     for i in range(n + 1):
         counts.append({"ways_count": 0, "coin_sets": []})
     counts[0]["ways_count"] = 1
+    counts[0]["coin_sets"] = [[]]
     for coin in c:
         for amount in range(coin, n + 1):
             prev_count = counts[amount - coin]
             counts[amount]["ways_count"] += prev_count["ways_count"]
 
             coin_sets = counts[amount]["coin_sets"]
-            if not prev_count["coin_sets"] and prev_count["ways_count"] > 0:
-                coin_sets.append([coin])
 
             for coins_set in prev_count["coin_sets"]:
                 prev_extended = [*coins_set, coin]
