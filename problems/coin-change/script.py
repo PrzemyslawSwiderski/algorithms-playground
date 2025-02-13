@@ -17,36 +17,36 @@ def get_ways_old(n, c):
     for coin in c:
         for i in range(coin, n + 1):
             count[i] += count[i - coin]
+
+    for amount, ways in enumerate(count):
+        print(f"{amount=} {ways=}")
     return count[n]
 
 
 def get_ways(n, c):
     counts = []
     for i in range(n + 1):
-        counts.append({"value": 0, "coin_sets": []})
-    counts[0]["value"] = 1
+        counts.append({"ways_count": 0, "coin_sets": []})
+    counts[0]["ways_count"] = 1
     for coin in c:
         for amount in range(coin, n + 1):
             prev_count = counts[amount - coin]
-            counts[amount]["value"] += prev_count["value"]
+            counts[amount]["ways_count"] += prev_count["ways_count"]
 
             coin_sets = counts[amount]["coin_sets"]
-            if not prev_count["coin_sets"]:
+            if not prev_count["coin_sets"] and prev_count["ways_count"] > 0:
                 coin_sets.append([coin])
-                continue
 
-            for coins_sets in prev_count["coin_sets"]:
-                prev_extended = [*coins_sets, coin]
+            for coins_set in prev_count["coin_sets"]:
+                prev_extended = [*coins_set, coin]
                 coin_sets.append(prev_extended)
 
-    i = 0
-    for c in counts:
-        value = c["value"]
-        coins_sets = c["coin_sets"]
-        print(f"{i=} {value=} {coins_sets=}")
-        i += 1
+    for amount, c in enumerate(counts):
+        ways = c["ways_count"]
+        coin_sets = c["coin_sets"]
+        print(f"{amount=} {ways=} {coin_sets=}")
 
-    return counts[n]["value"]
+    return counts[n]["ways_count"]
 
 
 if __name__ == '__main__':
