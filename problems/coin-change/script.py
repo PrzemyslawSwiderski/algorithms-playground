@@ -1,4 +1,5 @@
 #!/bin/python3
+import itertools
 import os
 
 
@@ -11,19 +12,17 @@ import os
 #  2. LONG_INTEGER_ARRAY c
 #
 
-def get_ways_old(n, c):
+def get_ways(n, c):
     count = [0] * (n + 1)
     count[0] = 1
     for coin in c:
         for i in range(coin, n + 1):
             count[i] += count[i - coin]
-
-    for amount, ways in enumerate(count):
-        print(f"{amount=} {ways=}")
+    print(count)
     return count[n]
 
 
-def get_ways(n, c):
+def get_ways_old(n, c):
     counts = []
     for i in range(n + 1):
         counts.append({"ways_count": 0, "coin_sets": []})
@@ -49,6 +48,9 @@ def get_ways(n, c):
 
 
 if __name__ == '__main__':
+    perms = itertools.product([1,2,3,4,5], [1,2], [1,2,3,45])
+    for p in perms:
+        print(p)
     fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
     first_multiple_input = input().rstrip().split()
