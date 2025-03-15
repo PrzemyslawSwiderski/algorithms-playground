@@ -1,33 +1,52 @@
 #!/bin/python3
 
-import math
 import os
-import random
-import re
-import sys
 
+
+# https://www.hackerrank.com/challenges/string-construction/problem?isFullScreen=true
+# Complete the 'string_construction' function below.
 #
-# Complete the 'twoStrings' function below.
-#
-# The function is expected to return a STRING.
-# The function accepts following parameters:
-#  1. STRING s1
-#  2. STRING s2
+# The function is expected to return an INTEGER.
+# The function accepts STRING s as parameter.
 #
 
-def two_strings(s1, s2):
+def string_construction(s):
     # Write your code here
-    s1_chars = set(s1)
-    s2_chars = set(s2)
-    print(s1_chars)
-    print(s2_chars)
-    common = s1_chars & s2_chars
-    print(common)
+    s = list(s)
+    p = []
+    min_cost = 0
+    i = 0
+    while len(p) < len(s):
+        max_substr = max_substring(p, s[i:])
+        print(f'{max_substr=}')
+        if i > 0 and len(max_substr) > 0:
+            p.extend(max_substr)
+            i += len(max_substr)
+        else:
+            p.append(s[i])
+            i += 1
+            min_cost += 1
 
-    if len(common) > 0:
-        return "YES"
+    return min_cost
 
-    return "NO"
+
+def max_substring(p, i_s):
+    sub_str = []
+
+    p_str = ''.join(p)
+    i_s_str = ''.join(i_s)
+
+    i = 1
+    while i <= len(i_s) and i_s_str[:i] in p_str:
+        sub_str = i_s_str[:i]
+        i += 1
+
+    print(f'{sub_str=}')
+    return sub_str
+
+def string_construction_proper_one(s):
+    # Write your code here
+    return len(set(s))
 
 if __name__ == '__main__':
     fptr = open(os.environ['OUTPUT_PATH'], 'w')
@@ -35,12 +54,10 @@ if __name__ == '__main__':
     q = int(input().strip())
 
     for q_itr in range(q):
-        s1 = input()
+        s = input()
 
-        s2 = input()
+        result = string_construction(s)
 
-        result = two_strings(s1, s2)
-
-        fptr.write(result + '\n')
+        fptr.write(str(result) + '\n')
 
     fptr.close()
