@@ -48,39 +48,36 @@ def knightl_on_a_chessboard(n):
 
 
 def bfs(n, a, b):
+    # Define knight moves for (a,b)
     directions = [
-        (a, b),
-        (a, -b),
-        (-a, b),
-        (-a, -b),
-        (b, a),
-        (b, -a),
-        (-b, a),
-        (-b, -a),
+        (a, b), (a, -b), (-a, b), (-a, -b),
+        (b, a), (b, -a), (-b, a), (-b, -a)
     ]
-    visited = {(0, 0)}
-    to_check = deque([(0, 0, 0)])
 
-    while to_check:
-        current = to_check.popleft()
-        if current[0] == n - 1 and current[1] == n - 1:
-            return current[2]
+    # Initialize visited array
+    visited = [[False] * n for _ in range(n)]
+    visited[0][0] = True
+
+    # BFS queue: (x, y, steps)
+    queue = deque([(0, 0, 0)])
+
+    while queue:
+        x, y, steps = queue.popleft()
+        if x == n - 1 and y == n - 1:
+            return steps
 
         for dx, dy in directions:
-            new_x = current[0] + dx
-            new_y = current[1] + dy
-            new_pos = (new_x, new_y)
-            if 0 <= new_x < n and 0 <= new_y < n and new_pos not in visited:
-                new_step = current[2] + 1
-                to_check.append((new_x, new_y, new_step))
-                visited.add((current[0], current[1]))
+            new_x, new_y = x + dx, y + dy
+            if 0 <= new_x < n and 0 <= new_y < n and not visited[new_x][new_y]:
+                visited[new_x][new_y] = True
+                queue.append((new_x, new_y, steps + 1))
 
     return -1
 
 
 if __name__ == '__main__':
 
-    size = 13
+    size = 25
     res = knightl_on_a_chessboard(size)
     for i in res:
         print(i)
