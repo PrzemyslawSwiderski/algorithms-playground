@@ -27,7 +27,10 @@ tasks {
     projectDir.resolve("problems").listFiles().forEach { file ->
         register<VenvTask>("run-${file.name}") {
             args = listOf(file.resolve("script.py").path)
-            inputFile.set(file.resolve("input.txt"))
+            val input = file.resolve("input.txt")
+            if (input.exists()) {
+                inputFile.set(file.resolve("input.txt"))
+            }
             environment = mapOf("OUTPUT_PATH" to file.resolve("output.txt"))
             dependsOn(condaInstall)
         }
