@@ -1,20 +1,22 @@
 import com.pswidersk.gradle.python.uv.UvTask
 
 plugins {
-    id("com.pswidersk.python-uv-plugin") version "0.2.0"
+    id("com.pswidersk.python-uv-plugin") version "0.4.25"
 }
 
 tasks {
 
     register<UvTask>("uvInfo") {
+        description = "List UV tool info"
         args = listOf("help")
     }
-
-    val uvEnvInstall by registering(UvTask::class) {
+    val uvEnvInstall = register<UvTask>("uvEnvInstall") {
+        description = "UV environment install"
         args = listOf("venv")
     }
 
-    val uvInstall by registering(UvTask::class) {
+    val uvInstall = register<UvTask>("uvInstall") {
+        description = "UV tool install"
         val requirementsFile = projectDir.resolve("requirements.txt").path
         args = listOf("pip", "install", "-r", requirementsFile)
         dependsOn(uvEnvInstall)
@@ -22,6 +24,7 @@ tasks {
 
     projectDir.resolve("problems").listFiles().forEach { file ->
         register<UvTask>("run-${file.name}") {
+            description = "Run Python script: ${file.name}"
             group = "algos"
             args = listOf("run", file.resolve("script.py").path)
             val input = file.resolve("input.txt")
