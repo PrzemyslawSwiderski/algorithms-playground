@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from collections import defaultdict
 
-
+# https://www.hackerrank.com/challenges/cut-the-tree/problem
 def cutTheTree(data, edges):
     n = len(data)
 
